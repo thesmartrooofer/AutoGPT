@@ -1,0 +1,54 @@
+# railway.toml for AutoGPT platform deployment
+
+[project]
+name = "AutoGPT-Platform"
+
+# Backend service configuration
+[service.backend]
+source = "./AutoGPT-master/autogpt_platform/backend"
+start = "python app.py"
+build = "pip install -r requirements.txt"
+
+[service.backend.env]
+# Database configuration (PostgreSQL managed by Railway)
+DB_USER = "{{DB_USER}}"
+DB_PASS = "{{DB_PASS}}"
+DB_NAME = "{{DB_NAME}}"
+DB_PORT = "{{DB_PORT}}"
+DATABASE_URL = "{{DATABASE_URL}}"
+
+# Redis configuration
+REDIS_HOST = "{{REDIS_HOST}}"
+REDIS_PORT = "{{REDIS_PORT}}"
+REDIS_PASSWORD = "{{REDIS_PASSWORD}}"
+
+# Encryption and Auth
+ENCRYPTION_KEY = "your-encryption-key"
+ENABLE_AUTH = true
+SUPABASE_URL = "your-supabase-url"
+SUPABASE_SERVICE_ROLE_KEY = "your-service-role-key"
+SUPABASE_JWT_SECRET = "your-jwt-secret"
+
+APP_ENV = "production"
+BEHAVE_AS = "cloud"
+FRONTEND_BASE_URL = "https://frontend.example.com"
+
+# Frontend service configuration
+[service.frontend]
+source = "./AutoGPT-master/autogpt_platform/frontend"
+start = "npm start"
+build = "npm install && npm run build"
+
+[service.frontend.env]
+NEXT_PUBLIC_AGPT_SERVER_URL = "https://backend.example.com/api"
+NEXT_PUBLIC_AGPT_WS_SERVER_URL = "wss://backend.example.com/ws"
+NEXT_PUBLIC_AGPT_MARKETPLACE_URL = "https://marketplace.example.com/api/v1/market"
+
+NEXT_PUBLIC_SUPABASE_URL = "your-supabase-url"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "your-anon-key"
+NEXT_PUBLIC_BEHAVE_AS = "CLOUD"
+
+# PostgreSQL database (managed by Railway)
+[service.database]
+source = "railway/database"
+plan = "starter"
